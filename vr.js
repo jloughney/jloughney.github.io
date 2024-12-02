@@ -1,5 +1,8 @@
 const myGraph = ForceGraphVR()
-    .jsonUrl('https://gist.githubusercontent.com/jloughney/e7ab155e467471b0054f3b094671b448/raw/bb31fd8d9fa1e5b7d62677036493f24a22ef0235/medical_data.json')
+    //testing json file for colors of links
+    //.jsonUrl('https://gist.githubusercontent.com/jloughney/62eee2ad5748f8bcfb57f746f87bc748/raw/a11cc766faecc2622bdc1c5970eb71ed1bdaf89f/testing-colors.json')
+    
+    .jsonUrl('https://gist.githubusercontent.com/jloughney/e7ab155e467471b0054f3b094671b448/raw/2b99aa7abcf5646ee9244ce39bf4eb2ecf7536ec/medical_data.json')
     .nodeAutoColorBy('id') // Color nodes based on their ID
     .nodeLabel(node => node.id)
 
@@ -58,7 +61,31 @@ const myGraph = ForceGraphVR()
     // Optional: Add particles to visualize the direction along the links
     .linkDirectionalParticles(2)  // Number of particles to display along the link
     .linkDirectionalParticleSpeed(0.01)  // Speed of particles
-    .linkDirectionalParticleColor(() => 'orange');  // Particle color
+    .linkDirectionalParticleColor(() => 'orange')  // Particle color
+
+    .linkColor(link => {
+      if (!link.time) {
+          console.warn('Missing time for link:', link);
+          return 'gray'; // Default color for missing dates
+      }
+  
+      // Parse the link time (assumes format "YYYY-MM-DD")
+      const dateParts = link.time.split('-'); // Split into [YYYY, MM, DD]
+      const date = new Date(dateParts[0], dateParts[1] - 1, dateParts[2]); // Convert to Date object
+  
+      // Get today's date without time
+      const today = new Date();
+      today.setHours(0, 0, 0, 0); // Reset time to midnight
+  
+      // Calculate the difference in days
+      const diffDays = Math.floor((date - today) / (1000 * 60 * 60 * 24));
+  
+      console.log('Link Time:', link.time, 'Parsed Date:', date, 'Today:', today, 'Difference in Days:', diffDays);
+  
+      // Map the day difference to a color
+      return getColorByDayDifference(diffDays);
+  });
+  
 
     // Attach the graph to the DOM element
     myGraph(document.getElementById('3d-graph'));
@@ -86,6 +113,25 @@ const myGraph = ForceGraphVR()
       
         return canvas;
       }
+    // Helper function to map dates to colors
+    //date is formatted as: YYYY-MM-DD
+    function getColorByDayDifference(diffDays) {
+      const colorScale = [
+          'grey',        // 0-1 days (default color) 
+          'green',     // 2-3 days
+          'light blue',     // 4-5 days
+          'blue',      // 6-7 days
+          'violet',       // 8-9 days
+          'yellow',     // 10-11 days
+          'orange',     // 12-13 days
+          'red'        // Beyond 14 days (default)
+      ];
+  
+      const index = Math.min(Math.floor(Math.abs(diffDays) / 2), colorScale.length - 1);
+      return colorScale[index];
+  }
+  
+  
 //for lag
 myGraph.onEngineTick(() => {
     // Access the A-Frame camera

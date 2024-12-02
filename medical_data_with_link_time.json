@@ -1,0 +1,1300 @@
+{
+    "nodes": [
+        {
+            "id": "Inject ICG Dye",
+            "link": 1
+        },
+        {
+            "id": "Anesthesia/Sanitation",
+            "link": 1
+        },
+        {
+            "id": "Patient Position",
+            "link": 1
+        },
+        {
+            "id": "Insufflation Techniques",
+            "link": 1
+        },
+        {
+            "id": "Hasson Technique",
+            "link": 1
+        },
+        {
+            "id": "HT: Opening Incision",
+            "link": 1
+        },
+        {
+            "id": "HT: Tissue Dissection",
+            "link": 1
+        },
+        {
+            "id": "HT: Visualize Linea Alba",
+            "link": 1
+        },
+        {
+            "id": "HT: Incise Fascia",
+            "link": 1
+        },
+        {
+            "id": "HT: Cut peritoneum",
+            "link": 1
+        },
+        {
+            "id": "HT: Place 2 sutures",
+            "link": 1
+        },
+        {
+            "id": "HT: Check cavity",
+            "link": 1
+        },
+        {
+            "id": "HT: Insert Hasson Port",
+            "link": 1
+        },
+        {
+            "id": "Optical Trocar Technique",
+            "link": 1
+        },
+        {
+            "id": "OT: Umbilicus Incision",
+            "link": 1
+        },
+        {
+            "id": "OT: Towel Clamps",
+            "link": 1
+        },
+        {
+            "id": "OT: Trocar Insertion",
+            "link": 1
+        },
+        {
+            "id": "OT: Visualize Layers of the Abdomen",
+            "link": 1
+        },
+        {
+            "id": "OT: Check Position with laparoscope",
+            "link": 1
+        },
+        {
+            "id": "Palmers Point OT/VN",
+            "link": 1
+        },
+        {
+            "id": "PP: Decompress Stomach/Bladder",
+            "link": 1
+        },
+        {
+            "id": "PP: Locate Palmer\u0092s Point",
+            "link": 1
+        },
+        {
+            "id": "PP: Insert Veress Needle at 90 degrees",
+            "link": 1
+        },
+        {
+            "id": "PP: Feel 3 pops",
+            "link": 1
+        },
+        {
+            "id": "Veress Needle Technique",
+            "link": 1
+        },
+        {
+            "id": "VNT: Lift Umbilicus",
+            "link": 1
+        },
+        {
+            "id": "VNT: Umbilicus Incision",
+            "link": 1
+        },
+        {
+            "id": "VNT: Insert Veress Needle",
+            "link": 1
+        },
+        {
+            "id": "VNT: Feel two pops",
+            "link": 1
+        },
+        {
+            "id": "VNT: Check needle position",
+            "link": 1
+        },
+        {
+            "id": "VNT: Saline syringe",
+            "link": 1
+        },
+        {
+            "id": "VNT: Blood return",
+            "link": 1
+        },
+        {
+            "id": "VNT: Vessel punctured",
+            "link": 1
+        },
+        {
+            "id": "VNT: Fecal Matter return",
+            "link": 1
+        },
+        {
+            "id": "VNT: Bowel punctured",
+            "link": 1
+        },
+        {
+            "id": "VNT: Saline return",
+            "link": 1
+        },
+        {
+            "id": "VNT: No saline return",
+            "link": 1
+        },
+        {
+            "id": "Insufflate Abdomen",
+            "link": 1
+        },
+        {
+            "id": "Inspect for Injury",
+            "link": 1
+        },
+        {
+            "id": "II: Cardiac Arrhythmia",
+            "link": 1
+        },
+        {
+            "id": "II: Loss of Pneumoperitoneum",
+            "link": 1
+        },
+        {
+            "id": "II: Insufficient Insufflation",
+            "link": 1
+        },
+        {
+            "id": "II: Poor Viewing Angles",
+            "link": 1
+        },
+        {
+            "id": "II: Trocar Induced Injury",
+            "link": 1
+        },
+        {
+            "id": "II: Venous Injury",
+            "link": 1
+        },
+        {
+            "id": "Primary Trocar Placement",
+            "link": 1
+        },
+        {
+            "id": "Laparoscope Insertion",
+            "link": 1
+        },
+        {
+            "id": "Placement of Other Trocars",
+            "link": 1
+        },
+        {
+            "id": "Abdominal Organ Injury",
+            "link": 1
+        },
+        {
+            "id": "Blood Vessel Injury",
+            "link": 1
+        },
+        {
+            "id": "Instrument Insertion",
+            "link": 1
+        },
+        {
+            "id": "Organ Location",
+            "link": 1
+        },
+        {
+            "id": "Abnormal Anatomy",
+            "link": 1
+        },
+        {
+            "id": "Grasp GB-Fundus",
+            "link": 1
+        },
+        {
+            "id": "Unable to Grasp",
+            "link": 1
+        },
+        {
+            "id": "Excessive Fat Surrounding Organs",
+            "link": 1
+        },
+        {
+            "id": "Move Fat",
+            "link": 1
+        },
+        {
+            "id": "Vascular Injury",
+            "link": 1
+        },
+        {
+            "id": "Grasp GB Fundus",
+            "link": 1
+        },
+        {
+            "id": "Lift GB",
+            "link": 1
+        },
+        {
+            "id": "GB Inflamed",
+            "link": 1
+        },
+        {
+            "id": "Hydropic GB",
+            "link": 1
+        },
+        {
+            "id": "Grasp GB infundibulum",
+            "link": 1
+        },
+        {
+            "id": "Clear 1/3 of GB from Cystic Plate",
+            "link": 1
+        },
+        {
+            "id": "Clear Tissues Surrounding Cystic Structures",
+            "link": 1
+        },
+        {
+            "id": "Locate CA",
+            "link": 1
+        },
+        {
+            "id": "Aberrant Anatomy Present",
+            "link": 1
+        },
+        {
+            "id": "Failure to Reach Critical View of Safety",
+            "link": 1
+        },
+        {
+            "id": "Locate CD",
+            "link": 1
+        },
+        {
+            "id": "Reach Critical View of Safety",
+            "link": 1
+        },
+        {
+            "id": "Clip of CA",
+            "link": 1
+        },
+        {
+            "id": "Incomplete Clip of CA",
+            "link": 1
+        },
+        {
+            "id": "Remove Clip",
+            "link": 1
+        },
+        {
+            "id": "Cut CA",
+            "link": 1
+        },
+        {
+            "id": "GB Injury",
+            "link": 1
+        },
+        {
+            "id": "Ripped GB",
+            "link": 1
+        },
+        {
+            "id": "Collect/Remove GS",
+            "link": 1
+        },
+        {
+            "id": "Clip of CD",
+            "link": 1
+        },
+        {
+            "id": "Incomplete Clip of CD",
+            "link": 1
+        },
+        {
+            "id": "Cut CD",
+            "link": 1
+        },
+        {
+            "id": "CBD Injury",
+            "link": 1
+        },
+        {
+            "id": "Open Surgery",
+            "link": 1
+        },
+        {
+            "id": "GB Detachment",
+            "link": 1
+        },
+        {
+            "id": "Arterial/Vascular Injury",
+            "link": 1
+        },
+        {
+            "id": "Severe Injury",
+            "link": 1
+        },
+        {
+            "id": "Liver injury",
+            "link": 1
+        },
+        {
+            "id": "Cystic plate injury",
+            "link": 1
+        },
+        {
+            "id": "Superficial Injury",
+            "link": 1
+        },
+        {
+            "id": "GB Removal",
+            "link": 1
+        },
+        {
+            "id": "GB too large for removal",
+            "link": 1
+        },
+        {
+            "id": "Check step",
+            "link": 1
+        },
+        {
+            "id": "Check other organs",
+            "link": 1
+        },
+        {
+            "id": "Inflamed appendix",
+            "link": 1
+        },
+        {
+            "id": "Fluids accumulated",
+            "link": 1
+        },
+        {
+            "id": "Trocar removal",
+            "link": 1
+        },
+        {
+            "id": "Closing",
+            "link": 1
+        },
+        {
+            "id": "Post-op",
+            "link": 1
+        },
+        {
+            "id": "Infection in incision site",
+            "link": 1
+        },
+        {
+            "id": "Hernia creation",
+            "link": 1
+        },
+        {
+            "id": "Bleeding at port sites",
+            "link": 1
+        },
+        {
+            "id": "Superficial bleeding",
+            "link": 1
+        },
+        {
+            "id": "Abdominal wall hematoma",
+            "link": 1
+        },
+        {
+            "id": "Pleural effusion",
+            "link": 1
+        },
+        {
+            "id": "VNT: 90 degrees obese PT",
+            "link": 1
+        },
+        {
+            "id": "VNT: 45 degrees otherwise",
+            "link": 1
+        },
+        {
+            "id": "VNT: Emergency laparotomy",
+            "link": 1
+        },
+        {
+            "id": "VNT: Needle in preperitoneal space",
+            "link": 1
+        },
+        {
+            "id": "II: Desufflate abdomen",
+            "link": 1
+        },
+        {
+            "id": "II: Continue Insufflation",
+            "link": 1
+        },
+        {
+            "id": "II: Abort procedure",
+            "link": 1
+        },
+        {
+            "id": "II: Air Embolism",
+            "link": 1
+        },
+        {
+            "id": "PTP: Transillumination",
+            "link": 1
+        },
+        {
+            "id": "Utilize Near-Infrared Scanning",
+            "link": 1
+        },
+        {
+            "id": "Electrocautery",
+            "link": 1
+        },
+        {
+            "id": "Dissect Tissue",
+            "link": 1
+        },
+        {
+            "id": "Drain GB with Syringe",
+            "link": 1
+        },
+        {
+            "id": "Subtotal Cholecystectomy",
+            "link": 1
+        },
+        {
+            "id": "Intra-operative Cholangiography",
+            "link": 1
+        },
+        {
+            "id": "Obtain Second View",
+            "link": 1
+        },
+        {
+            "id": "Replace Clip",
+            "link": 1
+        },
+        {
+            "id": "Irrigation and Suction",
+            "link": 1
+        },
+        {
+            "id": "Close and Transfer PT",
+            "link": 1
+        },
+        {
+            "id": "Utilize Cholangiogram",
+            "link": 1
+        },
+        {
+            "id": "Suture Duct",
+            "link": 1
+        },
+        {
+            "id": "Place T-tube",
+            "link": 1
+        },
+        {
+            "id": "Suture/Ligate/Pack",
+            "link": 1
+        },
+        {
+            "id": "Topical agents/Ligate/Pack",
+            "link": 1
+        },
+        {
+            "id": "Crush GS with grasper",
+            "link": 1
+        },
+        {
+            "id": "Appendectomy",
+            "link": 1
+        },
+        {
+            "id": "Suction/Place drain",
+            "link": 1
+        },
+        {
+            "id": "Cauterize ports",
+            "link": 1
+        },
+        {
+            "id": "Diagnose/treat infection",
+            "link": 1
+        },
+        {
+            "id": "Hernia repair",
+            "link": 1
+        },
+        {
+            "id": "Pack/Suture",
+            "link": 1
+        },
+        {
+            "id": "Re-open surgery",
+            "link": 1
+        },
+        {
+            "id": "Drain pleural cavity",
+            "link": 1
+        }
+    ],
+    "links": [
+        {
+            "source": "Inject ICG Dye",
+            "target": "Anesthesia/Sanitation",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "Anesthesia/Sanitation",
+            "target": "Patient Position",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "Patient Position",
+            "target": "Insufflation Techniques",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "Insufflation Techniques",
+            "target": "Hasson Technique",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "Insufflation Techniques",
+            "target": "Optical Trocar Technique",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "Insufflation Techniques",
+            "target": "Palmers Point OT/VN",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "Insufflation Techniques",
+            "target": "Veress Needle Technique",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "Hasson Technique",
+            "target": "HT: Opening Incision",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "HT: Opening Incision",
+            "target": "HT: Tissue Dissection",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "HT: Tissue Dissection",
+            "target": "HT: Visualize Linea Alba",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "HT: Visualize Linea Alba",
+            "target": "HT: Incise Fascia",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "HT: Incise Fascia",
+            "target": "HT: Cut peritoneum",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "HT: Cut peritoneum",
+            "target": "HT: Place 2 sutures",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "HT: Place 2 sutures",
+            "target": "HT: Check cavity",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "HT: Check cavity",
+            "target": "HT: Insert Hasson Port",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "HT: Insert Hasson Port",
+            "target": "Insufflate Abdomen",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "Optical Trocar Technique",
+            "target": "OT: Umbilicus Incision",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "OT: Umbilicus Incision",
+            "target": "OT: Towel Clamps",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "OT: Towel Clamps",
+            "target": "OT: Trocar Insertion",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "OT: Trocar Insertion",
+            "target": "OT: Visualize Layers of the Abdomen",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "OT: Visualize Layers of the Abdomen",
+            "target": "OT: Check Position with laparoscope",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "OT: Check Position with laparoscope",
+            "target": "Insufflate Abdomen",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "Palmers Point OT/VN",
+            "target": "PP: Decompress Stomach/Bladder",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "PP: Decompress Stomach/Bladder",
+            "target": "PP: Locate Palmer\u0092s Point",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "PP: Locate Palmer\u0092s Point",
+            "target": "PP: Insert Veress Needle at 90 degrees",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "PP: Insert Veress Needle at 90 degrees",
+            "target": "PP: Feel 3 pops",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "PP: Feel 3 pops",
+            "target": "VNT: Saline syringe",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "PP: Locate Palmer\u0092s Point",
+            "target": "OT: Trocar Insertion",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "Veress Needle Technique",
+            "target": "VNT: Lift Umbilicus",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "VNT: Lift Umbilicus",
+            "target": "VNT: Umbilicus Incision",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "VNT: Umbilicus Incision",
+            "target": "VNT: Insert Veress Needle",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "VNT: Insert Veress Needle",
+            "target": "VNT: 90 degrees obese PT",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "VNT: Insert Veress Needle",
+            "target": "VNT: 45 degrees otherwise",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "VNT: Insert Veress Needle",
+            "target": "VNT: Feel two pops",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "VNT: Feel two pops",
+            "target": "VNT: Check needle position",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "VNT: Check needle position",
+            "target": "VNT: Saline syringe",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "VNT: Saline syringe",
+            "target": "VNT: Blood return",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "VNT: Saline syringe",
+            "target": "VNT: Fecal Matter return",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "VNT: Saline syringe",
+            "target": "VNT: Saline return",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "VNT: Saline syringe",
+            "target": "VNT: No saline return",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "VNT: Blood return",
+            "target": "VNT: Vessel punctured",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "VNT: Vessel punctured",
+            "target": "VNT: Emergency laparotomy",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "VNT: Fecal Matter return",
+            "target": "VNT: Bowel punctured",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "VNT: Bowel punctured",
+            "target": "VNT: Emergency laparotomy",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "VNT: Saline return",
+            "target": "VNT: Needle in preperitoneal space",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "VNT: No saline return",
+            "target": "Insufflate Abdomen",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "Insufflate Abdomen",
+            "target": "Inspect for Injury",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "Inspect for Injury",
+            "target": "II: Cardiac Arrhythmia",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "II: Cardiac Arrhythmia",
+            "target": "II: Desufflate abdomen",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "II: Loss of Pneumoperitoneum",
+            "target": "II: Insufficient Insufflation",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "II: Insufficient Insufflation",
+            "target": "II: Continue Insufflation",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "II: Insufficient Insufflation",
+            "target": "II: Poor Viewing Angles",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "Inspect for Injury",
+            "target": "II: Insufficient Insufflation",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "II: Poor Viewing Angles",
+            "target": "II: Trocar Induced Injury",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "II: Trocar Induced Injury",
+            "target": "II: Abort procedure",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "Inspect for Injury",
+            "target": "II: Venous Injury",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "II: Venous Injury",
+            "target": "II: Air Embolism",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "Inspect for Injury",
+            "target": "Primary Trocar Placement",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "Primary Trocar Placement",
+            "target": "PTP: Transillumination",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "Primary Trocar Placement",
+            "target": "Laparoscope Insertion",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "Laparoscope Insertion",
+            "target": "Placement of Other Trocars",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "Placement of Other Trocars",
+            "target": "Abdominal Organ Injury",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "Placement of Other Trocars",
+            "target": "Blood Vessel Injury",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "Abdominal Organ Injury",
+            "target": "Open Surgery",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "Blood Vessel Injury",
+            "target": "Open Surgery",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "Placement of Other Trocars",
+            "target": "Instrument Insertion",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "Instrument Insertion",
+            "target": "Organ Location",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "Organ Location",
+            "target": "Abnormal Anatomy",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "Abnormal Anatomy",
+            "target": "Utilize Near-Infrared Scanning",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "Organ Location",
+            "target": "Grasp GB-Fundus",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "Grasp GB-Fundus",
+            "target": "Unable to Grasp",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "Unable to Grasp",
+            "target": "Excessive Fat Surrounding Organs",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "Excessive Fat Surrounding Organs",
+            "target": "Move Fat",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "Move Fat",
+            "target": "Vascular Injury",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "Vascular Injury",
+            "target": "Electrocautery",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "Unable to Grasp",
+            "target": "Dissect Tissue",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "Unable to Grasp",
+            "target": "Drain GB with Syringe",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "Grasp GB Fundus",
+            "target": "Lift GB",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "Lift GB",
+            "target": "GB Inflamed",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "GB Inflamed",
+            "target": "Drain GB with Syringe",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "Hydropic GB",
+            "target": "Drain GB with Syringe",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "Lift GB",
+            "target": "Grasp GB infundibulum",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "Grasp GB infundibulum",
+            "target": "Clear 1/3 of GB from Cystic Plate",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "Clear 1/3 of GB from Cystic Plate",
+            "target": "Clear Tissues Surrounding Cystic Structures",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "Clear Tissues Surrounding Cystic Structures",
+            "target": "Locate CA",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "Locate CA",
+            "target": "Aberrant Anatomy Present",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "Aberrant Anatomy Present",
+            "target": "Utilize Near-Infrared Scanning",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "Aberrant Anatomy Present",
+            "target": "Failure to Reach Critical View of Safety",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "Failure to Reach Critical View of Safety",
+            "target": "Open Surgery",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "Failure to Reach Critical View of Safety",
+            "target": "Subtotal Cholecystectomy",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "Failure to Reach Critical View of Safety",
+            "target": "Intra-operative Cholangiography",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "Aberrant Anatomy Present",
+            "target": "Obtain Second View",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "Locate CA",
+            "target": "Locate CD",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "Locate CD",
+            "target": "Aberrant Anatomy Present",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "Locate CD",
+            "target": "Reach Critical View of Safety",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "Reach Critical View of Safety",
+            "target": "Clip of CA",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "Clip of CA",
+            "target": "Incomplete Clip of CA",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "Incomplete Clip of CA",
+            "target": "Remove Clip",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "Remove Clip",
+            "target": "Replace Clip",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "Clip of CA",
+            "target": "Cut CA",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "Cut CA",
+            "target": "GB Injury",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "GB Injury",
+            "target": "Ripped GB",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "Ripped GB",
+            "target": "Collect/Remove GS",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "Collect/Remove GS",
+            "target": "Irrigation and Suction",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "Cut CA",
+            "target": "Clip of CD",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "Clip of CD",
+            "target": "Incomplete Clip of CD",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "Incomplete Clip of CD",
+            "target": "Remove Clip",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "Remove Clip",
+            "target": "Replace Clip",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "Cut CA",
+            "target": "CBD Injury",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "Cut CD",
+            "target": "CBD Injury",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "CBD Injury",
+            "target": "Close and Transfer PT",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "CBD Injury",
+            "target": "Open Surgery",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "CBD Injury",
+            "target": "Utilize Cholangiogram",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "Open Surgery",
+            "target": "Suture Duct",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "Open Surgery",
+            "target": "Place T-tube",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "Cut CD",
+            "target": "GB Detachment",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "Cut CD",
+            "target": "CBD Injury",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "GB Detachment",
+            "target": "Arterial/Vascular Injury",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "Arterial/Vascular Injury",
+            "target": "Suture/Ligate/Pack",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "Arterial/Vascular Injury",
+            "target": "Severe Injury",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "Severe Injury",
+            "target": "Open Surgery",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "GB Detachment",
+            "target": "Liver injury",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "Liver injury",
+            "target": "Cystic plate injury",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "Cystic plate injury",
+            "target": "Severe Injury",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "Cystic plate injury",
+            "target": "Superficial Injury",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "Superficial Injury",
+            "target": "Topical agents/Ligate/Pack",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "GB Detachment",
+            "target": "GB Removal",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "GB Removal",
+            "target": "GB too large for removal",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "GB too large for removal",
+            "target": "Crush GS with grasper",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "GB Removal",
+            "target": "Check step",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "Check step",
+            "target": "Check other organs",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "Check other organs",
+            "target": "Inflamed appendix",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "Inflamed appendix",
+            "target": "Appendectomy",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "Check step",
+            "target": "Fluids accumulated",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "Fluids accumulated",
+            "target": "Suction/Place drain",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "Check step",
+            "target": "Trocar removal",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "Trocar removal",
+            "target": "Cauterize ports",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "Trocar removal",
+            "target": "Closing",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "Closing",
+            "target": "Post-op",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "Post-op",
+            "target": "Infection in incision site",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "Infection in incision site",
+            "target": "Diagnose/treat infection",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "Post-op",
+            "target": "Hernia creation",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "Hernia creation",
+            "target": "Hernia repair",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "Post-op",
+            "target": "Bleeding at port sites",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "Bleeding at port sites",
+            "target": "Superficial bleeding",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "Superficial bleeding",
+            "target": "Pack/Suture",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "Bleeding at port sites",
+            "target": "Abdominal wall hematoma",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "Abdominal wall hematoma",
+            "target": "Re-open surgery",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "Post-op",
+            "target": "Pleural effusion",
+            "time": "2024-12-02"
+        },
+        {
+            "source": "Pleural effusion",
+            "target": "Drain pleural cavity",
+            "time": "2024-12-02"
+        }
+    ]
+}
