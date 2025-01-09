@@ -1,96 +1,155 @@
-let xrSession = null;
-let xrReferenceSpace = null;
+// Updated vr.js with manual StereoCamera implementation
+const canvas = document.createElement('canvas');
+const gl = canvas.getContext('webgl2');  // Use WebGL2 for multiview support
+console.log(gl.getSupportedExtensions());
 
-// Start WebXR session
-async function startXRSession() {
-    if (!navigator.xr) {
-        console.error("WebXR not supported");
-        return;
-    }
+if (navigator.xr) {
+  console.log("WebXR supported!");
+} else {
+  console.log("WebXR not supported.");
+}
 
-    try {
-        xrSession = await navigator.xr.requestSession('immersive-vr');
-        console.log("WebXR Session started");
+if (!gl) {
+    console.error('WebGL2 is not supported by your browser');
+} else {
+    // Try to get the OVR_multiview2 or WEBGL_multiview extension
+    const multiview = gl.getExtension('OVR_multiview2') || gl.getExtension('WEBGL_multiview');
+    if (multiview) {
+        console.log('Multiview extension enabled:', multiview);
 
-        const canvas = document.createElement('canvas');
-        const gl = canvas.getContext('webgl2', { xrCompatible: true });
+        // Set up the framebuffer for multiview rendering
+        const framebuffer = gl.createFramebuffer();
+        gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
 
-        document.body.appendChild(canvas);
+        const texture = gl.createTexture();
+        gl.bindTexture(gl.TEXTURE_2D_ARRAY, texture);
+        gl.texStorage3D(gl.TEXTURE_2D_ARRAY, 1, gl.RGBA8, gl.canvas.width, gl.canvas.height, 2);
+        gl.framebufferTextureLayer(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, texture, 0, 0);
 
-        // Make WebGL context XR compatible
-        await gl.makeXRCompatible();
-        xrSession.updateRenderState({ baseLayer: new XRWebGLLayer(xrSession, gl) });
-
-        xrReferenceSpace = await xrSession.requestReferenceSpace('local');
-
-        xrSession.requestAnimationFrame(onXRFrame);
-    } catch (err) {
-        console.error("Failed to start XR session:", err);
+        gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+    } else {
+        console.warn('OVR_multiview2 or WEBGL_multiview extension not available. Falling back to standard rendering.');
     }
 }
 
-// Render loop for WebXR
-function onXRFrame(time, frame) {
-    const session = frame.session;
-    const pose = frame.getViewerPose(xrReferenceSpace);
+// Create a WebGLRenderer
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.setSize(window.innerWidth, window.innerHeight);
+document.body.appendChild(renderer.domElement);
 
-    if (pose) {
-        const glLayer = session.renderState.baseLayer;
-        gl.bindFramebuffer(gl.FRAMEBUFFER, glLayer.framebuffer);
-        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+// Create a PerspectiveCamera
+const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+camera.position.z = 5;
 
-        for (const view of pose.views) {
-            const viewport = glLayer.getViewport(view);
-            gl.viewport(viewport.x, viewport.y, viewport.width, viewport.height);
+// Create a StereoCamera
+const stereoCamera = new THREE.StereoCamera();
+stereoCamera.aspect = 0.5; // Each eye gets half the screen
 
-            drawScene(view.transform);
-        }
-    }
-    xrSession.requestAnimationFrame(onXRFrame);
-}
+// Create the Scene
+const scene = new THREE.Scene();
 
-// Scene rendering (graph logic)
-function drawScene(transform) {
-    const camera = myGraph.__threeObj.camera;
+// Add lights
+const light = new THREE.DirectionalLight(0xffffff, 1);
+light.position.set(1, 1, 1).normalize();
+scene.add(light);
 
-    // Sync camera with XR view
-    camera.position.set(
-        transform.position.x,
-        transform.position.y,
-        transform.position.z
-    );
-    camera.quaternion.set(
-        transform.orientation.x,
-        transform.orientation.y,
-        transform.orientation.z,
-        transform.orientation.w
-    );
+const ambientLight = new THREE.AmbientLight(0x404040); // soft white light
+scene.add(ambientLight);
+// Create a container for the ForceGraphVR
+const container = document.getElementById('3d-graph');
 
-    // Render the scene
-    myGraph.__threeObj.renderer.render(myGraph.__threeObj.scene, camera);
-}
-
-// Start button to enter VR
-const startButton = document.createElement('button');
-startButton.textContent = "Enter VR";
-startButton.style.position = 'absolute';
-startButton.style.top = '10px';
-startButton.style.left = '10px';
-startButton.onclick = startXRSession;
-document.body.appendChild(startButton);
-
-// Initialize the 3D force graph
+// Initialize ForceGraphVR
 const myGraph = ForceGraphVR()
     .jsonUrl('https://gist.githubusercontent.com/jloughney/e7ab155e467471b0054f3b094671b448/raw/2b99aa7abcf5646ee9244ce39bf4eb2ecf7536ec/medical_data.json')
     .nodeAutoColorBy('id')
+    .nodeLabel(node => node.id)
+    .nodeThreeObject(node => {
+        // Create a text label using THREE.Sprite
+        const spriteMaterial = new THREE.SpriteMaterial({
+            map: new THREE.CanvasTexture(createTextCanvas(node.id)),
+            transparent: true
+        });
+        const sprite = new THREE.Sprite(spriteMaterial);
+        sprite.scale.set(50, 25, 1); // Larger scale for better readability
+        sprite.position.set(0, 15, 0); // Adjust position above the node
+
+        // Disable raycasting for this sprite
+        sprite.raycast = () => {}; // Prevent the sprite from being raycasted
+        sprite.frustumCulled = false; // Ensure it’s always rendered, even outside the frustum
+
+        // Store a reference for visibility control
+        node.__textSprite = sprite;
+
+        return sprite; // Return the text object
+    })
+    .nodeThreeObjectExtend(true)
     .linkColor(() => 'white')
-    .linkWidth(2);
+    .linkWidth(2)
+    .linkDirectionalArrowLength(5)
+    .linkDirectionalArrowColor(() => 'white')
+    .linkDirectionalArrowRelPos(0.99)
+    .linkDirectionalArrowResolution(8)
+    .linkDirectionalParticles(2)
+    .linkDirectionalParticleSpeed(0.01)
+    .linkDirectionalParticleColor(() => 'orange');
 
-myGraph(document.getElementById('3d-graph'));
+// Attach the graph to the container
+myGraph(container);
 
-// Attach Three.js objects to access them later
-myGraph.__threeObj = {
-    scene: myGraph._threeObj,
-    renderer: new THREE.WebGLRenderer({ antialias: true }),
-    camera: new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000)
-};
+// Add Full-Screen Mode
+function toggleFullScreen() {
+    if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen();
+    } else {
+        document.exitFullscreen();
+    }
+}
+document.addEventListener('dblclick', toggleFullScreen);
+
+// Animation Loop
+function animate() {
+    requestAnimationFrame(animate);
+
+    // Update the stereo camera
+    stereoCamera.update(camera);
+
+    // Render left eye
+    renderer.setViewport(0, 0, window.innerWidth / 2, window.innerHeight);
+    renderer.render(scene, stereoCamera.cameraL);
+
+    // Render right eye
+    renderer.setViewport(window.innerWidth / 2, 0, window.innerWidth / 2, window.innerHeight);
+    renderer.render(scene, stereoCamera.cameraR);
+}
+animate();
+
+// Handle Window Resizing
+window.addEventListener('resize', () => {
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+});
+
+// Helper function to create a text canvas
+function createTextCanvas(text) {
+    const canvas = document.createElement('canvas');
+    const context = canvas.getContext('2d');
+    canvas.width = 512; // Larger canvas for better resolution
+    canvas.height = 256;
+
+    context.fillStyle = 'rgba(255, 255, 255, 1)';
+    const maxFontSize = 48; // Default maximum font size
+    const minFontSize = 24; // Minimum font size for very long text
+    const fontSize = Math.max(
+        minFontSize,
+        maxFontSize - Math.floor((text.length - 10) * 1.5) // Linear scaling
+    );
+
+    context.font = `${fontSize}px Arial`;
+    context.textAlign = 'center';
+    context.textBaseline = 'middle';
+    context.clearRect(0, 0, canvas.width, canvas.height); // Clear canvas
+    context.fillText(text, canvas.width / 2, canvas.height / 2);
+
+    return canvas;
+}
