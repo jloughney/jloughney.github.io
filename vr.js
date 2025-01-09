@@ -1,3 +1,36 @@
+const canvas = document.createElement('canvas');
+const gl = canvas.getContext('webgl2');  // Use WebGL2 for multiview support
+console.log(gl.getSupportedExtensions());
+
+if (navigator.xr) {
+  console.log("WebXR supported!");
+} else {
+  console.log("WebXR not supported.");
+}
+
+if (!gl) {
+    console.error('WebGL2 is not supported by your browser');
+} else {
+    // Try to get the OVR_multiview2 or WEBGL_multiview extension
+    const multiview = gl.getExtension('OVR_multiview2') || gl.getExtension('WEBGL_multiview');
+    if (multiview) {
+        console.log('Multiview extension enabled:', multiview);
+        
+        // Set up the framebuffer for multiview rendering
+        const framebuffer = gl.createFramebuffer();
+        gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
+
+        const texture = gl.createTexture();
+        gl.bindTexture(gl.TEXTURE_2D_ARRAY, texture);
+        gl.texStorage3D(gl.TEXTURE_2D_ARRAY, 1, gl.RGBA8, gl.canvas.width, gl.canvas.height, 2);
+        gl.framebufferTextureLayer(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, texture, 0, 0);
+
+        gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+    } else {
+        console.warn('OVR_multiview2 or WEBGL_multiview extension not available. Falling back to standard rendering.');
+    }
+}
+
 const myGraph = ForceGraphVR()
     //testing json file for colors of links
     //.jsonUrl('https://gist.githubusercontent.com/jloughney/62eee2ad5748f8bcfb57f746f87bc748/raw/a11cc766faecc2622bdc1c5970eb71ed1bdaf89f/testing-colors.json')
@@ -89,6 +122,13 @@ const myGraph = ForceGraphVR()
 
     // Attach the graph to the DOM element
     myGraph(document.getElementById('3d-graph'));
+
+    // Attach Three.js objects
+    myGraph.__threeObj = {
+      scene: myGraph._threeObj,
+      renderer: new THREE.WebGLRenderer({ antialias: true }),
+      camera: new THREE.PerspectiveCamera(75, canvas.width / canvas.height, 0.1, 1000)
+    };
 
     // Helper function to create a text canvas
     function createTextCanvas(text) {
