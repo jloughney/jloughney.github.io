@@ -5,6 +5,13 @@ import { StereoEffect } from 'three/addons/effects/StereoEffect.js';
 const container = document.createElement('div');
 document.body.appendChild(container);
 
+// Ensure the container fills the screen
+container.style.width = '100vw';
+container.style.height = '100vh';
+container.style.margin = '0';
+container.style.padding = '0';
+container.style.overflow = 'hidden';
+
 // Create a camera
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 camera.position.z = 5;
@@ -57,7 +64,7 @@ const myGraph = ForceGraphVR()
 scene.add(myGraph.scene());
 
 // Create renderer
-const renderer = new THREE.WebGLRenderer();
+const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setPixelRatio(window.devicePixelRatio);
 renderer.setSize(window.innerWidth, window.innerHeight);
 container.appendChild(renderer.domElement);
