@@ -10,22 +10,20 @@
   </style>
 </head>
 <body>
-  <!-- Create a container for the graph -->
-  <div id="3d-graph" style="width: 100vw; height: 100vh; position: relative;"></div>
+  <!-- Container for side-by-side graphs -->
+  <div style="display: flex; width: 100vw; height: 100vh;">
+    <div id="3d-graph-left" style="width: 50vw; height: 100vh;"></div>
+    <div id="3d-graph-right" style="width: 50vw; height: 100vh;"></div>
+  </div>
 
   <!-- Tooltip for node hover -->
   <div id="tooltip" class="tooltip"></div>
 
- <!-- Include the THREE.js library -->
- <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-
- <!-- Include the three-spritetext library for text labels -->
-<script src="https://unpkg.com/three-spritetext"></script>
-
-<script src="/Users/jloughney/Desktop/VIS/jloughney.github.io/StereoCamera.js"></script>  <!-- Make sure this is the correct path -->
-
-<script src="https://unpkg.com/3d-force-graph-vr"></script>
-<script src="vr.js"></script>
-
+  <!-- Include necessary scripts -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://unpkg.com/three-spritetext"></script>
+  <script src="https://unpkg.com/3d-force-graph-vr"></script>
+  <script src="vr.js"></script>
 </body>
+
 </html>
