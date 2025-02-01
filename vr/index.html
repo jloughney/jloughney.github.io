@@ -3,7 +3,7 @@
   <head>
     <title>A-Frame VR Test (iPhone Compatible)</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    
+
     <!-- Load Correct A-Frame Version Based on iOS or Other Devices -->
     <script>
       if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
@@ -16,27 +16,25 @@
   
   <body>
     <a-scene>
-      <!-- Camera with Correct Positioning -->
+      <!-- Camera -->
       <a-camera position="0 1.6 0" look-controls>
         <a-entity cursor="rayOrigin: mouse"></a-entity>
       </a-camera>
 
       <!-- Cube (Placed Further Away) -->
-      <a-box position="0 1 -5" rotation="0 45 0" color="blue"></a-box>
+      <a-box position="0 1 -5" rotation="0 45 0" color="blue" visible="true"></a-box>
 
-      <a-box position="5 6 0" rotation="0 45 0" color="red"></a-box>
-      <a-box position="-4 -3 -9" rotation="0 45 0" color="yellow"></a-box>
-      <a-box position="3 4 -2" rotation="0 45 0" color="green"></a-box>
+      <a-box position="2 3 -3" rotation="0 45 0" color="red" visible="true"></a-box>
     </a-scene>
 
-    <!-- Enter VR Button (Fix for iPhone) -->
+    <!-- Enter VR Button -->
     <button id="vrButton" style="
         position: absolute; top: 20px; left: 20px; padding: 10px 20px; 
         font-size: 16px; background: blue; color: white; border: none; cursor: pointer;">
       Enter VR
     </button>
 
-    <!-- Ensure Camera Position is Reset in VR Mode -->
+    <!-- Ensure Objects Remain Visible in VR Mode -->
     <script>
       document.querySelector("#vrButton").addEventListener("click", function() {
         let scene = document.querySelector("a-scene");
@@ -48,8 +46,14 @@
       });
 
       document.querySelector("a-scene").addEventListener("enter-vr", function () {
-        let camera = document.querySelector("a-camera");
-        camera.setAttribute("position", "0 1.6 0");
+        // Force objects to remain visible
+        let objects = document.querySelectorAll("a-box, a-sphere, a-plane, a-entity");
+        objects.forEach(obj => {
+          obj.setAttribute("visible", "true");
+        });
+
+        // Debugging
+        console.log("VR Mode Activated. Objects:", objects);
       });
     </script>
   </body>
