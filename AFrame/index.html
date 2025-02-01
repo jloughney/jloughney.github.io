@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>3D Force Graph with Hover and Right-Click</title>
+  <style>
+    body { margin: 0; }
+    canvas { display: block; }
+    #vrButton {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      padding: 10px 20px;
+      font-size: 16px;
+      background: blue;
+      color: white;
+      border: none;
+      cursor: pointer;
+      z-index: 1000;
+    }
+  </style>
+</head>
+<body>
+  <!-- Create a container for the graph -->
+  <div id="3d-graph" style="width: 100vw; height: 100vh; position: relative;"></div>
+
+  <!-- Tooltip for node hover -->
+  <div id="tooltip" class="tooltip"></div>
+
+ <!-- Include the THREE.js library -->
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+ <!-- Include the three-spritetext library for text labels -->
+<script src="https://unpkg.com/three-spritetext"></script>
+
+
+
+  <!-- Include the 3d-force-graph library from unpkg -->
+  <script src="https://unpkg.com/3d-force-graph-vr"></script>
+
+  <!-- VR Button -->
+  <button id="vrButton">Enter VR</button>
+
+  <!-- Load Libraries in Correct Order -->
+  <script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
+
+  <script src="vr.js"></script>
+</body>
+</html>
