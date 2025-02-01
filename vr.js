@@ -75,19 +75,19 @@ function createScene() {
   });
 }
 
+let allNodes = {}; // ✅ Shared list of nodes for both graphs
+let leftGraphFinalized = false; // ✅ Tracks if left graph is fully settled
 
-
-
-
-
-// Function to create the graph with A-Frame cameras
 function createGraph(containerId) {
-  let cutCDPosition = { x: 0, y: 0, z: 0 }; // Default position
-  let foundCutCD = false; // Flag to track if we found the node
-  let graphLoaded = false; // Flag to check when the graph is stable
-
   const graph = ForceGraphVR()
       .jsonUrl('https://gist.githubusercontent.com/jloughney/e7ab155e467471b0054f3b094671b448/raw/2b99aa7abcf5646ee9244ce39bf4eb2ecf7536ec/medical_data.json')
+      .width(window.innerWidth / 2)  // ✅ Make each graph take up half the screen width
+      .height(window.innerHeight)  // ✅ Full height
+      .numDimensions(3)
+      .forceEngine("d3")
+      .cooldownTicks(100)
+      .d3AlphaDecay(0.03)
+      .d3VelocityDecay(0.3)
       .nodeAutoColorBy('id')
       .nodeLabel(node => node.id)
       .nodeThreeObject(node => {
@@ -120,26 +120,6 @@ function createGraph(containerId) {
       .linkDirectionalParticleSpeed(0.01)
       .linkDirectionalParticleColor(() => 'orange')
       (document.getElementById(containerId));
-
-  // ✅ Track the graph’s simulation state
-  graph.onEngineStop(() => {
-      console.log(`Graph simulation settled for ${containerId}.`);
-      graphLoaded = true;
-      
-      // ✅ Now find and store the final position of "Cut CD"
-      let graphData = graph.graphData();
-      let cutCDNode = graphData.nodes.find(node => node.id === "Cut CD");
-
-      if (cutCDNode) {
-          cutCDPosition = { x: cutCDNode.x, y: cutCDNode.y, z: cutCDNode.z };
-          console.log(`Final position of "Cut CD" in ${containerId}: (${cutCDPosition.x}, ${cutCDPosition.y}, ${cutCDPosition.z})`);
-          
-          // ✅ Move the camera to the final stable position
-          moveToNode(cutCDPosition);
-      } else {
-          console.warn(`"Cut CD" not found in ${containerId} after graph stabilized.`);
-      }
-  });
 
   return graph;
 }
@@ -200,7 +180,7 @@ function syncInput(graph) {
   updateCameras();
 
 }
-
+//not using rn
 function moveToNode(position) {
   console.log(`Moving cameras to "Cut CD" node at (${position.x}, ${position.y}, ${position.z})`);
 
@@ -231,6 +211,31 @@ function smoothMove(camera, targetX, targetY, targetZ) {
   animateMove();
 }
 
+function logCameraPositions() {
+  let cameras = document.querySelectorAll('a-entity[camera]');
+
+  // if (cameras.length !== 2) {
+  //     console.warn("Cameras not found, retrying...");
+  //     setTimeout(logCameraPositions, 500);
+  //     return;
+  // }
+
+  let leftCamera = cameras[0];
+  let rightCamera = cameras[1];
+
+  function printPositions() {
+      let leftPos = leftCamera.getAttribute('position');
+      let rightPos = rightCamera.getAttribute('position');
+
+      console.log(`📍 Left Camera Position: x=${leftPos.x}, y=${leftPos.y}, z=${leftPos.z}`);
+      console.log(`📍 Right Camera Position: x=${rightPos.x}, y=${rightPos.y}, z=${rightPos.z}`);
+      console.log(`🔄 Camera Desync: Δx=${Math.abs(leftPos.x - rightPos.x)}, Δy=${Math.abs(leftPos.y - rightPos.y)}, Δz=${Math.abs(leftPos.z - rightPos.z)}`);
+
+      requestAnimationFrame(printPositions);
+  }
+
+  printPositions();
+}
 
 
 
@@ -242,4 +247,6 @@ function smoothMove(camera, targetX, targetY, targetZ) {
 window.onload = () => {
   console.log("Window fully loaded, initializing input sync...");
   syncInput(graphLeft);
+  logCameraPositions();
+  
 };

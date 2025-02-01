@@ -7,36 +7,24 @@
   <style>
     body {
       margin: 0;
-      overflow: hidden; /* Prevents horizontal scrolling */
       display: flex;
-      justify-content: center;
+      justify-content: space-between; /* ✅ Ensures graphs are evenly spaced */
       align-items: center;
       height: 100vh;
-    }
-
-    /* Container for side-by-side graphs */
-    .graph-container {
-      display: flex;
       width: 100vw;
-      height: 100vh;
     }
 
-    /* Individual graph styling */
     .graph {
-      width: 50vw; /* Each graph takes exactly half the screen width */
+      flex: 1; /* ✅ Each graph takes up half the screen */
       height: 100vh;
-      position: relative;
     }
   </style>
 </head>
 <body>
   <!-- Two side-by-side graph displays -->
-  <div class="graph-container">
-    <div id="3d-graph-left" class="graph"></div>
-    <div id="3d-graph-right" class="graph"></div>
-  </div>
+  <div id="3d-graph-left" class="graph"></div>
+  <div id="3d-graph-right" class="graph"></div>
 
-  <!-- Include necessary scripts -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script src="https://unpkg.com/three-spritetext"></script>
   <script src="https://unpkg.com/3d-force-graph-vr"></script>
