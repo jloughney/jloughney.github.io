@@ -3,21 +3,38 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>3D Force Graph with Hover and Right-Click</title>
+  <title>3D Force Graph - Stereoscopic VR</title>
   <style>
-    body { margin: 0; }
-    canvas { display: block; }
+    body {
+      margin: 0;
+      overflow: hidden; /* Prevents horizontal scrolling */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    /* Container for side-by-side graphs */
+    .graph-container {
+      display: flex;
+      width: 100vw;
+      height: 100vh;
+    }
+
+    /* Individual graph styling */
+    .graph {
+      width: 50vw; /* Each graph takes exactly half the screen width */
+      height: 100vh;
+      position: relative;
+    }
   </style>
 </head>
 <body>
-  <!-- Container for side-by-side graphs -->
-  <div style="display: flex; width: 100vw; height: 100vh;">
-    <div id="3d-graph-left" style="width: 50vw; height: 100vh;"></div>
-    <div id="3d-graph-right" style="width: 50vw; height: 100vh;"></div>
+  <!-- Two side-by-side graph displays -->
+  <div class="graph-container">
+    <div id="3d-graph-left" class="graph"></div>
+    <div id="3d-graph-right" class="graph"></div>
   </div>
-
-  <!-- Tooltip for node hover -->
-  <div id="tooltip" class="tooltip"></div>
 
   <!-- Include necessary scripts -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
@@ -25,5 +42,4 @@
   <script src="https://unpkg.com/3d-force-graph-vr"></script>
   <script src="vr.js"></script>
 </body>
-
 </html>

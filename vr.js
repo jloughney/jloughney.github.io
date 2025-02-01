@@ -32,47 +32,60 @@ function createTextCanvas(text) {
 function createScene() {
   let scene = document.querySelector('a-scene');
 
-  // If no scene exists, create one
   if (!scene) {
       scene = document.createElement('a-scene');
       scene.setAttribute('embedded', '');
       document.body.appendChild(scene);
   }
 
-  // Create a sky background
   let sky = document.createElement('a-sky');
   sky.setAttribute('radius', '3000');
   scene.appendChild(sky);
 
-  // Create the camera group
+  // ✅ Remove existing cameras to prevent duplication
+  document.querySelectorAll('a-entity[camera]').forEach(cam => cam.remove());
+
   let cameraGroup = document.createElement('a-entity');
-  cameraGroup.setAttribute('position', '0 0 300');
   cameraGroup.setAttribute('movement-controls', 'controls: gamepad, touch; fly: true; speed: 7');
 
-  // Create the left camera
-  let leftCamera = document.createElement('a-entity');
-  leftCamera.setAttribute('id', 'left-camera');
-  leftCamera.setAttribute('camera', '');
-  leftCamera.setAttribute('position', '-0.05 0 0'); // Slight left offset
-  leftCamera.setAttribute('look-controls', 'pointerLockEnabled: false');
-  leftCamera.setAttribute('wasd-controls', 'fly: true; acceleration: 700');
+  // ✅ Ensure exactly two cameras are created
+  for (let i = 0; i < 2; i++) {
+      let camera = document.createElement('a-entity');
+      camera.setAttribute('camera', '');
+      camera.setAttribute('look-controls', 'pointerLockEnabled: false');
+      camera.setAttribute('wasd-controls', 'fly: true; acceleration: 500');
+      cameraGroup.appendChild(camera);
+  }
 
-  // Create the right camera
-  let rightCamera = document.createElement('a-entity');
-  rightCamera.setAttribute('id', 'right-camera');
-  rightCamera.setAttribute('camera', '');
-  rightCamera.setAttribute('position', '0.05 0 0'); // Slight right offset
-  rightCamera.setAttribute('look-controls', 'pointerLockEnabled: false');
-  rightCamera.setAttribute('wasd-controls', 'fly: true; acceleration: 700');
-
-  // Attach cameras to the scene
-  cameraGroup.appendChild(leftCamera);
-  cameraGroup.appendChild(rightCamera);
   scene.appendChild(cameraGroup);
+
+  // ✅ Set both cameras to the same initial position after scene loads
+  scene.addEventListener('loaded', () => {
+      let cameras = document.querySelectorAll('a-entity[camera]');
+
+      if (cameras.length === 2) {
+          cameras.forEach(camera => {
+              camera.setAttribute('position', '0 0 300');
+              camera.setAttribute('rotation', '0 0 0');
+          });
+          console.log("Cameras initialized at (0,0,300)");
+      } else {
+          console.warn("Unexpected number of cameras detected:", cameras.length);
+      }
+  });
 }
+
+
+
+
+
 
 // Function to create the graph with A-Frame cameras
 function createGraph(containerId) {
+  let cutCDPosition = { x: 0, y: 0, z: 0 }; // Default position
+  let foundCutCD = false; // Flag to track if we found the node
+  let graphLoaded = false; // Flag to check when the graph is stable
+
   const graph = ForceGraphVR()
       .jsonUrl('https://gist.githubusercontent.com/jloughney/e7ab155e467471b0054f3b094671b448/raw/2b99aa7abcf5646ee9244ce39bf4eb2ecf7536ec/medical_data.json')
       .nodeAutoColorBy('id')
@@ -85,7 +98,7 @@ function createGraph(containerId) {
           const sprite = new THREE.Sprite(spriteMaterial);
           sprite.scale.set(50, 25, 1);
           sprite.position.set(0, 15, 0);
-          sprite.raycast = () => {}; // Disable raycasting on text
+          sprite.raycast = () => {};
           sprite.frustumCulled = false;
           node.__textSprite = sprite;
           return sprite;
@@ -108,8 +121,33 @@ function createGraph(containerId) {
       .linkDirectionalParticleColor(() => 'orange')
       (document.getElementById(containerId));
 
+  // ✅ Track the graph’s simulation state
+  graph.onEngineStop(() => {
+      console.log(`Graph simulation settled for ${containerId}.`);
+      graphLoaded = true;
+      
+      // ✅ Now find and store the final position of "Cut CD"
+      let graphData = graph.graphData();
+      let cutCDNode = graphData.nodes.find(node => node.id === "Cut CD");
+
+      if (cutCDNode) {
+          cutCDPosition = { x: cutCDNode.x, y: cutCDNode.y, z: cutCDNode.z };
+          console.log(`Final position of "Cut CD" in ${containerId}: (${cutCDPosition.x}, ${cutCDPosition.y}, ${cutCDPosition.z})`);
+          
+          // ✅ Move the camera to the final stable position
+          moveToNode(cutCDPosition);
+      } else {
+          console.warn(`"Cut CD" not found in ${containerId} after graph stabilized.`);
+      }
+  });
+
   return graph;
 }
+
+
+
+
+
 
 // Create the scene and cameras
 createScene();
@@ -118,35 +156,90 @@ createScene();
 const graphLeft = createGraph('3d-graph-left');
 const graphRight = createGraph('3d-graph-right');
 
+console.log(graphLeft.graphData());
+
 // Function to synchronize user input across both graphs
-function syncInput() {
-  const leftCamera = document.querySelector('#left-camera');
-  const rightCamera = document.querySelector('#right-camera');
-  
-  function applyMovement(event) {
-      if (!leftCamera || !rightCamera){
-        console.log("error cameras not there");
-        return;
-      } 
+function syncInput(graph) {
+  let cameras = document.querySelectorAll('a-entity[camera]');
 
-      // Get current positions and rotations
-      let leftPos = leftCamera.getAttribute('position');
-      let leftRot = leftCamera.getAttribute('rotation');
-
-      // Apply the same movement & rotation to both cameras
-      rightCamera.setAttribute('position', leftPos);
-      rightCamera.setAttribute('rotation', leftRot);
-
-      console.log(leftPos);
-      console.log(leftRot);
+  if (cameras.length < 2) {
+      console.warn("Cameras not found for input sync, retrying...");
+      setTimeout(syncInput, 100); // Wait 100ms before retrying
+      return;
   }
 
-  // Listen to all movement-related events and apply them to both displays
-  document.addEventListener('keydown', applyMovement);
-  document.addEventListener('keyup', applyMovement);
-  document.addEventListener('mousemove', applyMovement);
-  document.addEventListener('wheel', applyMovement);
+  let leftCamera = cameras[0];
+  let rightCamera = cameras[1];
+
+  function updateCameras() {
+    let cameras = document.querySelectorAll('a-entity[camera]');
+    //console.log(cameras);
+
+
+    let leftCamera = cameras[0];
+    let rightCamera = cameras[1];
+
+    let leftPos = leftCamera.getAttribute('position');
+    let leftRot = leftCamera.getAttribute('rotation');
+
+    // // Sync the second camera to the first camera using `setAttribute`
+    // rightCamera.setAttribute('position', `${leftPos.x} ${leftPos.y} ${leftPos.z}`);
+    // rightCamera.setAttribute('rotation', `${leftRot.x} ${leftRot.y} ${leftRot.z}`);
+
+    document.querySelectorAll('a-entity[camera]').forEach(camera => {
+      camera.setAttribute('position', leftPos);
+      camera.setAttribute('rotation', leftRot);
+  });
+
+    requestAnimationFrame(updateCameras);
+
+    
 }
 
+  // Start syncing continuously
+  updateCameras();
+
+}
+
+function moveToNode(position) {
+  console.log(`Moving cameras to "Cut CD" node at (${position.x}, ${position.y}, ${position.z})`);
+
+  document.querySelectorAll('a-entity[camera]').forEach(camera => {
+      smoothMove(camera, position.x, position.y, position.z);
+  });
+}
+
+// ✅ Function to move camera smoothly
+function smoothMove(camera, targetX, targetY, targetZ) {
+  let currentPos = camera.getAttribute("position");
+
+  let step = 0;
+  let steps = 50; // Smooth transition in 50 frames
+  function animateMove() {
+      step++;
+      let newX = currentPos.x + ((targetX - currentPos.x) * (step / steps));
+      let newY = currentPos.y + ((targetY - currentPos.y) * (step / steps));
+      let newZ = currentPos.z + ((targetZ - currentPos.z) * (step / steps));
+
+      camera.setAttribute("position", `${newX} ${newY} ${newZ}`);
+
+      if (step < steps) {
+          requestAnimationFrame(animateMove);
+      }
+  }
+
+  animateMove();
+}
+
+
+
+
+
+
 // Run input sync when A-Frame is ready
-setTimeout(syncInput, 2000);
+//setTimeout(syncInput, 2000);
+
+window.onload = () => {
+  console.log("Window fully loaded, initializing input sync...");
+  syncInput(graphLeft);
+};
