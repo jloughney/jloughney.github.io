@@ -80,7 +80,7 @@ const myGraph = ForceGraphVR()
       // Calculate the difference in days
       const diffDays = Math.floor((date - today) / (1000 * 60 * 60 * 24));
   
-      console.log('Link Time:', link.time, 'Parsed Date:', date, 'Today:', today, 'Difference in Days:', diffDays);
+      //console.log('Link Time:', link.time, 'Parsed Date:', date, 'Today:', today, 'Difference in Days:', diffDays);
   
       // Map the day difference to a color
       return getColorByDayDifference(diffDays);
