@@ -7,10 +7,10 @@
   <style>
     body { margin: 0; }
     canvas { display: block; }
-    #vrButton {
+
+    #vrButton, #toggleColorButton {
       position: absolute;
       top: 20px;
-      left: 20px;
       padding: 10px 20px;
       font-size: 16px;
       background: blue;
@@ -19,6 +19,9 @@
       cursor: pointer;
       z-index: 1000;
     }
+
+    #vrButton { left: 20px; } /* VR button on the left */
+    #toggleColorButton { right: 20px; } /* Color toggle button on the right */
   </style>
 </head>
 <body>
@@ -28,13 +31,11 @@
   <!-- Tooltip for node hover -->
   <div id="tooltip" class="tooltip"></div>
 
- <!-- Include the THREE.js library -->
- <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <!-- Include the THREE.js library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 
- <!-- Include the three-spritetext library for text labels -->
-<script src="https://unpkg.com/three-spritetext"></script>
-
-
+  <!-- Include the three-spritetext library for text labels -->
+  <script src="https://unpkg.com/three-spritetext"></script>
 
   <!-- Include the 3d-force-graph library from unpkg -->
   <script src="https://unpkg.com/3d-force-graph-vr"></script>
@@ -42,9 +43,10 @@
   <!-- VR Button -->
   <button id="vrButton">Enter VR</button>
 
-  <!-- Load Libraries in Correct Order -->
-  <!-- script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script -->
+  <!-- Toggle Colors Button for Mobile -->
+  <button id="toggleColorButton">Toggle Colors</button>
 
+  <!-- Load Libraries in Correct Order -->
   <script src="vr.js"></script>
 </body>
 </html>
