@@ -113,11 +113,11 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 
       }, 2000);
-      // **Step 2: Wait for `graph1` to stabilize before mirroring**
+      // Wait for `graph1` to stabilize before mirroring
       setTimeout(() => {
           console.log("Left Graph Stabilized. Locking node positions...");
 
-          // **Step 3: Lock all node positions (Prevent Left Graph from Moving)**
+          // Lock all node positions (Prevent Left Graph from Moving)
           storedGraphData.nodes.forEach(node => {
               node.fx = node.x;
               node.fy = node.y;
@@ -126,7 +126,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
           console.log("Node positions locked for left graph:", storedGraphData);
 
-          // **Step 4: Create the mirrored graph**
+          // Create the mirrored graph
           const mirroredNodes = storedGraphData.nodes.map(node => ({
               ...node,
               x: node.x, // Mirror X-axis
@@ -142,7 +142,7 @@ document.addEventListener("DOMContentLoaded", async () => {
               links: storedGraphData.links.map(link => ({ ...link })) // Copy links exactly
           };
 
-          console.log("✅ Mirrored Graph Data Prepared:", mirroredGraphData);
+          console.log("Mirrored Graph Data Prepared:", mirroredGraphData);
 
           const graph2 = ForceGraphVR()
               .graphData(mirroredGraphData) // Use stored mirrored data
@@ -182,7 +182,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
           graph2(rightContainer);
 
-          // **Step 5: Move Right Camera Slightly Right**
+          // Step 5: Move Right Camera Slightly Right
           setTimeout(() => {
               const cameraEntity = document.querySelector('a-entity[camera]');
               if (cameraEntity) {
