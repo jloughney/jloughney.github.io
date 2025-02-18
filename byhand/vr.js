@@ -1,9 +1,33 @@
+// Move the function to the top to prevent reference errors
+function createTextCanvas(text) {
+  const canvas = document.createElement('canvas');
+  const context = canvas.getContext('2d');
+  canvas.width = 512;
+  canvas.height = 256;
+
+  context.fillStyle = 'rgba(255, 255, 255, 1)';
+  const maxFontSize = 48;
+  const minFontSize = 24;
+  const fontSize = Math.max(
+      minFontSize,
+      maxFontSize - Math.floor((text.length - 10) * 1.5)
+  );
+
+  context.font = `${fontSize}px Arial`;
+  context.textAlign = 'center';
+  context.textBaseline = 'middle';
+  context.clearRect(0, 0, canvas.width, canvas.height);
+  context.fillText(text, canvas.width / 2, canvas.height / 2);
+
+  return canvas;
+}
+
 document.addEventListener("DOMContentLoaded", async () => {
   const leftContainer = document.getElementById('graph-left');
   const rightContainer = document.getElementById('graph-right');
 
   if (!leftContainer || !rightContainer) {
-      console.error("❌ Graph containers not found.");
+      console.error("Graph containers not found.");
       return;
   }
 
@@ -17,19 +41,19 @@ document.addEventListener("DOMContentLoaded", async () => {
       storedGraphData = await response.json();
       
       if (!storedGraphData.nodes || storedGraphData.nodes.length === 0) {
-          throw new Error("❌ Fetched graph data is empty.");
+          throw new Error("Fetched graph data is empty.");
       }
 
-      console.log("✅ Graph data successfully fetched and stored:", storedGraphData);
+      console.log("Graph data successfully fetched and stored:", storedGraphData);
 
-      // Set Graph Size to Match Container
+      // **Set Graph Size** to Match Container
       const graphWidth = leftContainer.clientWidth;
       const graphHeight = leftContainer.clientHeight;
 
-      // Define Camera Offsets for Stereoscopic Effect
-      const cameraOffset = 0.065; // ~6.5cm human eye distance
+      // **Define Camera Offsets for Stereoscopic Effect**
+      const cameraOffset = 10; // TODO: need to figure out what the offset should be
 
-      // Create the first graph (original)
+      // Create the first graph (original, left eye)
       const graph1 = ForceGraphVR()
           .graphData(storedGraphData) // Use manually fetched data
           .nodeAutoColorBy('id')
@@ -70,20 +94,39 @@ document.addEventListener("DOMContentLoaded", async () => {
 
       graph1(leftContainer);
 
-      // **Step 1: Wait for `graph1` to stabilize before mirroring**
+      // **Step 1: Move Left Camera Slightly Left**
       setTimeout(() => {
-          console.log("✅ Left Graph Stabilized. Locking node positions...");
+          const cameraEntity = document.querySelector('a-entity[camera]');
+          if (cameraEntity) {
+              const currentPos = cameraEntity.getAttribute('position');
+              const newX = currentPos.x - cameraOffset;
+              cameraEntity.setAttribute('position', `${newX} ${currentPos.y} ${currentPos.z}`);
+              console.log(`Left Camera Moved to: ${newX} ${currentPos.y} ${currentPos.z}`);
+          } else {
+              console.error("Camera entity not found.");
+          }
+      }, 1000); // Wait for A-Frame to load
+      setInterval(() => {
+        const cameraEntity = document.querySelector('a-entity[camera]');
+        const currentPos = cameraEntity.getAttribute('position');
+        console.log("Left Camera Position: ", currentPos)
 
-          // **Step 2: Lock all node positions (Prevent Left Graph from Moving)**
+
+      }, 2000);
+      // **Step 2: Wait for `graph1` to stabilize before mirroring**
+      setTimeout(() => {
+          console.log("Left Graph Stabilized. Locking node positions...");
+
+          // **Step 3: Lock all node positions (Prevent Left Graph from Moving)**
           storedGraphData.nodes.forEach(node => {
               node.fx = node.x;
               node.fy = node.y;
               node.fz = node.z;
           });
 
-          console.log("✅ Node positions locked for left graph:", storedGraphData);
+          console.log("Node positions locked for left graph:", storedGraphData);
 
-          // **Step 3: Create the mirrored graph**
+          // **Step 4: Create the mirrored graph**
           const mirroredNodes = storedGraphData.nodes.map(node => ({
               ...node,
               x: node.x, // Mirror X-axis
@@ -138,37 +181,31 @@ document.addEventListener("DOMContentLoaded", async () => {
               .linkDirectionalParticleColor(() => 'orange');
 
           graph2(rightContainer);
-          console.log("✅ Mirrored graph successfully created.");
+
+          // **Step 5: Move Right Camera Slightly Right**
+          setTimeout(() => {
+              const cameraEntity = document.querySelector('a-entity[camera]');
+              if (cameraEntity) {
+                  const currentPos = cameraEntity.getAttribute('position');
+                  const newX = currentPos.x + (cameraOffset*2);
+                  cameraEntity.setAttribute('position', `${newX} ${currentPos.y} ${currentPos.z}`);
+                  console.log(`Right Camera Moved to: ${newX} ${currentPos.y} ${currentPos.z}`);
+              } else {
+                  console.error("Camera entity not found.");
+              }
+          }, 1000); // Wait for A-Frame to load
+          setInterval(() => {
+            const cameraEntity = document.querySelector('a-entity[camera]');
+            const currentPos = cameraEntity.getAttribute('position');
+            console.log("Right Camera Position: ", currentPos)
+    
+    
+          }, 2000);
+
+          console.log(" Mirrored graph successfully created.");
       }, 3000); // Delay to ensure first graph fully loads
 
   } catch (error) {
       console.error(error.message);
   }
 });
-
-// Helper function to create a text canvas
-function createTextCanvas(text) {
-  const canvas = document.createElement('canvas');
-  const context = canvas.getContext('2d');
-  canvas.width = 512;
-  canvas.height = 256;
-
-  context.fillStyle = 'rgba(255, 255, 255, 1)';
-  const maxFontSize = 48;
-  const minFontSize = 24;
-  const fontSize = Math.max(
-      minFontSize,
-      maxFontSize - Math.floor((text.length - 10) * 1.5)
-  );
-
-  context.font = `${fontSize}px Arial`;
-  context.textAlign = 'center';
-  context.textBaseline = 'middle';
-  context.clearRect(0, 0, canvas.width, canvas.height);
-  context.fillText(text, canvas.width / 2, canvas.height / 2);
-
-  return canvas;
-}
-
-console.log("THREE.js Version:", THREE.REVISION);
-console.log("AFRAME is available:", typeof AFRAME !== "undefined");
