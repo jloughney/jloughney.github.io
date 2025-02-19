@@ -1,211 +1,244 @@
+// Store Dark Mode State
+let isDarkMode = true;
+let textSprites = {}; // Store text labels for updating later
+
+// Store Separate Text Sprites
+let textSpritesLeft = {};
+let textSpritesRight = {};
+
 // Move the function to the top to prevent reference errors
-function createTextCanvas(text) {
-  const canvas = document.createElement('canvas');
-  const context = canvas.getContext('2d');
-  canvas.width = 512;
-  canvas.height = 256;
+function createTextCanvas(text, textColor = 'white') {
+    const canvas = document.createElement('canvas');
+    const context = canvas.getContext('2d');
+    canvas.width = 512;
+    canvas.height = 256;
 
-  context.fillStyle = 'rgba(255, 255, 255, 1)';
-  const maxFontSize = 48;
-  const minFontSize = 24;
-  const fontSize = Math.max(
-      minFontSize,
-      maxFontSize - Math.floor((text.length - 10) * 1.5)
-  );
+    context.fillStyle = textColor;
+    const maxFontSize = 48;
+    const minFontSize = 24;
+    const fontSize = Math.max(
+        minFontSize,
+        maxFontSize - Math.floor((text.length - 10) * 1.5)
+    );
 
-  context.font = `${fontSize}px Arial`;
-  context.textAlign = 'center';
-  context.textBaseline = 'middle';
-  context.clearRect(0, 0, canvas.width, canvas.height);
-  context.fillText(text, canvas.width / 2, canvas.height / 2);
+    context.font = `${fontSize}px Arial`;
+    context.textAlign = 'center';
+    context.textBaseline = 'middle';
+    context.clearRect(0, 0, canvas.width, canvas.height);
+    context.fillText(text, canvas.width / 2, canvas.height / 2);
 
-  return canvas;
+    return canvas;
 }
 
+// Function to invert colors
+function toggleColors() {
+    isDarkMode = !isDarkMode; // Toggle mode
+
+    // Set new colors
+    const bgColor = isDarkMode ? '#09092e' : 'white';
+    const nodeColor = isDarkMode ? 'white' : '#20208a';
+    const textColor = isDarkMode ? 'white' : 'black';
+
+    // Update background
+    document.body.style.backgroundColor = bgColor;
+    graph1.backgroundColor(bgColor);
+    graph2.backgroundColor(bgColor);
+
+    // Update graph colors
+    graph1.nodeColor(() => nodeColor);
+    graph2.nodeColor(() => nodeColor);
+
+    // Reapply date-based link colors
+    graph1.linkColor(link => getLinkColor(link));
+    graph2.linkColor(link => getLinkColor(link));
+
+    // Update Left Graph Text Labels
+    Object.keys(textSpritesLeft).forEach(nodeId => {
+        const sprite = textSpritesLeft[nodeId];
+        if (sprite) {
+            sprite.material.map = new THREE.CanvasTexture(createTextCanvas(nodeId, textColor));
+            sprite.material.needsUpdate = true;
+            //console.log(` Updated LEFT graph text color for node: ${nodeId}`);
+        }
+    });
+
+    // Update Right Graph Text Labels
+    Object.keys(textSpritesRight).forEach(nodeId => {
+        const sprite = textSpritesRight[nodeId];
+        if (sprite) {
+            sprite.material.map = new THREE.CanvasTexture(createTextCanvas(nodeId, textColor));
+            sprite.material.needsUpdate = true;
+            //console.log(` Updated RIGHT graph text color for node: ${nodeId}`);
+        }
+    });
+
+    console.log(`Switched to ${isDarkMode ? 'Dark' : 'Light'} Mode`);
+}
+
+
+// Function to determine link color based on date
+function getLinkColor(link) {
+    if (!link.time) {
+        return isDarkMode ? 'gray' : 'black';
+    }
+
+    const dateParts = link.time.split('-');
+    const date = new Date(dateParts[0], dateParts[1] - 1, dateParts[2]);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const diffDays = Math.floor((date - today) / (1000 * 60 * 60 * 24));
+
+    return getColorByDayDifference(diffDays);
+}
+
+// Date-based color mapping function
+function getColorByDayDifference(diffDays) {
+    const colorScale = [
+        'grey', 'green', 'lightblue', 'blue', 'red', 'yellow', 'orange', 'violet'
+    ];
+    const index = Math.min(Math.floor(Math.abs(diffDays) / 2), colorScale.length - 1);
+    return colorScale[index];
+}
+
+// Event Listener for 'I' Key Press to Toggle Colors
+document.addEventListener("keydown", function(event) {
+    if (event.key.toLowerCase() === "i") {
+        toggleColors();
+    }
+});
+
+// Event Listener for Button Click to Toggle Colors
+document.querySelector("#toggleColorButton").addEventListener("click", toggleColors);
+
+// Initialize Graphs
 document.addEventListener("DOMContentLoaded", async () => {
-  const leftContainer = document.getElementById('graph-left');
-  const rightContainer = document.getElementById('graph-right');
+    const leftContainer = document.getElementById('graph-left');
+    const rightContainer = document.getElementById('graph-right');
 
-  if (!leftContainer || !rightContainer) {
-      console.error("Graph containers not found.");
-      return;
-  }
+    if (!leftContainer || !rightContainer) {
+        console.error("Graph containers not found.");
+        return;
+    }
 
-  let storedGraphData = { nodes: [], links: [] }; // Manual storage
+    let storedGraphData = { nodes: [], links: [] };
 
-  try {
-      console.log("Fetching graph data...");
-      
-      // Fetch JSON data manually
-      const response = await fetch('https://gist.githubusercontent.com/jloughney/e7ab155e467471b0054f3b094671b448/raw/2b99aa7abcf5646ee9244ce39bf4eb2ecf7536ec/medical_data.json');
-      storedGraphData = await response.json();
-      
-      if (!storedGraphData.nodes || storedGraphData.nodes.length === 0) {
-          throw new Error("Fetched graph data is empty.");
-      }
+    try {
+        console.log("Fetching graph data...");
+        const response = await fetch('https://gist.githubusercontent.com/jloughney/e7ab155e467471b0054f3b094671b448/raw/2b99aa7abcf5646ee9244ce39bf4eb2ecf7536ec/medical_data.json');
+        storedGraphData = await response.json();
 
-      console.log("Graph data successfully fetched and stored:", storedGraphData);
+        if (!storedGraphData.nodes || storedGraphData.nodes.length === 0) {
+            throw new Error("Fetched graph data is empty.");
+        }
 
-      // **Set Graph Size** to Match Container
-      const graphWidth = leftContainer.clientWidth;
-      const graphHeight = leftContainer.clientHeight;
+        console.log("Graph data successfully fetched and stored:", storedGraphData);
 
-      // **Define Camera Offsets for Stereoscopic Effect**
-      const cameraOffset = 10; // TODO: need to figure out what the offset should be
+        const graphWidth = leftContainer.clientWidth;
+        const graphHeight = leftContainer.clientHeight;
 
-      // Create the first graph (original, left eye)
-      const graph1 = ForceGraphVR()
-          .graphData(storedGraphData) // Use manually fetched data
-          .nodeAutoColorBy('id')
-          .nodeLabel(node => node.id)
-          .width(graphWidth)
-          .height(graphHeight)
-          .nodeThreeObject(node => {
-              const group = new THREE.Group();
-              const spriteMaterial = new THREE.SpriteMaterial({
-                  map: new THREE.CanvasTexture(createTextCanvas(node.id)),
-                  transparent: true
-              });
+        // Initialize Graph 1 (Left Eye)
+        window.graph1 = ForceGraphVR()
+            .graphData(storedGraphData)
+            .nodeAutoColorBy('id')
+            .nodeLabel(node => node.id)
+            .width(graphWidth)
+            .height(graphHeight)
+            .nodeThreeObject(node => {
+                const group = new THREE.Group();
+                const spriteMaterial = new THREE.SpriteMaterial({
+                    map: new THREE.CanvasTexture(createTextCanvas(node.id, 'white')),
+                    transparent: true
+                });
+        
+                const sprite = new THREE.Sprite(spriteMaterial);
+                sprite.scale.set(50, 25, 1);
+                sprite.position.set(0, 15, 0);
+                sprite.raycast = () => {};
+                group.add(sprite);
+        
+                textSpritesLeft[node.id] = sprite; // Store in Left Graph Storage
+                return group;
+            })
+            .nodeThreeObjectExtend(true)
+            .linkColor(link => getLinkColor(link))
+            .linkOpacity(0.7)
+            .linkWidth(2)
+            .nodeColor(() => 'white')
+            .nodeOpacity(0.7)
+            .onNodeClick(node => {
+                if (node.link) window.open(node.link, '_blank');
+            });
 
-              const sprite = new THREE.Sprite(spriteMaterial);
-              sprite.scale.set(50, 25, 1);
-              sprite.position.set(0, 15, 0);
-              sprite.raycast = () => {}; // Disable raycasting on text
-
-              group.add(sprite);
-              return group;
-          })
-          .nodeThreeObjectExtend(true)
-          .linkColor(() => '#3da7c4')
-          .linkOpacity(0.7)
-          .linkWidth(2)
-          .nodeColor(() => 'white')
-          .nodeOpacity(0.7)
-          .onNodeClick(node => {
-              if (node.link) window.open(node.link, '_blank');
-          })
-          .linkDirectionalArrowLength(5)
-          .linkDirectionalArrowColor(() => 'white')
-          .linkDirectionalArrowRelPos(0.99)
-          .linkDirectionalArrowResolution(8)
-          .linkDirectionalParticles(2)
-          .linkDirectionalParticleSpeed(0.01)
-          .linkDirectionalParticleColor(() => 'orange');
-
-      graph1(leftContainer);
-
-      // **Step 1: Move Left Camera Slightly Left**
-      setTimeout(() => {
-          const cameraEntity = document.querySelector('a-entity[camera]');
-          if (cameraEntity) {
-              const currentPos = cameraEntity.getAttribute('position');
-              const newX = currentPos.x - cameraOffset;
-              cameraEntity.setAttribute('position', `${newX} ${currentPos.y} ${currentPos.z}`);
-              console.log(`Left Camera Moved to: ${newX} ${currentPos.y} ${currentPos.z}`);
-          } else {
-              console.error("Camera entity not found.");
-          }
-      }, 1000); // Wait for A-Frame to load
-      setInterval(() => {
-        const cameraEntity = document.querySelector('a-entity[camera]');
-        const currentPos = cameraEntity.getAttribute('position');
-        console.log("Left Camera Position: ", currentPos)
+        graph1(leftContainer);
 
 
-      }, 2000);
-      // Wait for `graph1` to stabilize before mirroring
-      setTimeout(() => {
-          console.log("Left Graph Stabilized. Locking node positions...");
+        // Lock Left Graph Nodes Before Creating Right Graph
+        setTimeout(() => {
+            storedGraphData.nodes.forEach(node => {
+                node.fx = node.x;
+                node.fy = node.y;
+                node.fz = node.z;
+            });
 
-          // Lock all node positions (Prevent Left Graph from Moving)
-          storedGraphData.nodes.forEach(node => {
-              node.fx = node.x;
-              node.fy = node.y;
-              node.fz = node.z;
-          });
+            console.log("Node positions locked for left graph:", storedGraphData);
 
-          console.log("Node positions locked for left graph:", storedGraphData);
+            // Create Mirrored Graph (Right Eye)
+            const mirroredNodes = storedGraphData.nodes.map(node => ({
+                ...node,
+                x: node.x,
+                y: node.y,
+                z: node.z,
+                fx: node.x,
+                fy: node.y,
+                fz: node.z
+            }));
 
-          // Create the mirrored graph
-          const mirroredNodes = storedGraphData.nodes.map(node => ({
-              ...node,
-              x: node.x, // Mirror X-axis
-              y: node.y,
-              z: node.z,
-              fx: node.x, // Fix mirrored positions too
-              fy: node.y,
-              fz: node.z
-          }));
+            const mirroredGraphData = {
+                nodes: mirroredNodes,
+                links: storedGraphData.links.map(link => ({ ...link }))
+            };
 
-          const mirroredGraphData = {
-              nodes: mirroredNodes,
-              links: storedGraphData.links.map(link => ({ ...link })) // Copy links exactly
-          };
+            console.log("Mirrored Graph Data Prepared:", mirroredGraphData);
 
-          console.log("Mirrored Graph Data Prepared:", mirroredGraphData);
+            window.graph2 = ForceGraphVR()
+                .graphData(mirroredGraphData)
+                .nodeAutoColorBy('id')
+                .nodeLabel(node => node.id)
+                .width(graphWidth)
+                .height(graphHeight)
+                .nodeThreeObject(node => {
+                    const group = new THREE.Group();
+                    const spriteMaterial = new THREE.SpriteMaterial({
+                        map: new THREE.CanvasTexture(createTextCanvas(node.id, 'white')),
+                        transparent: true
+                    });
+            
+                    const sprite = new THREE.Sprite(spriteMaterial);
+                    sprite.scale.set(50, 25, 1);
+                    sprite.position.set(0, 15, 0);
+                    sprite.raycast = () => {};
+                    group.add(sprite);
+            
+                    textSpritesRight[node.id] = sprite; // Store in Right Graph Storage
+                    return group;
+                })
+                .nodeThreeObjectExtend(true)
+                .linkColor(link => getLinkColor(link))
+                .linkOpacity(0.7)
+                .linkWidth(2)
+                .nodeColor(() => 'white')
+                .nodeOpacity(0.7)
+                .onNodeClick(node => {
+                    if (node.link) window.open(node.link, '_blank');
+                });
 
-          const graph2 = ForceGraphVR()
-              .graphData(mirroredGraphData) // Use stored mirrored data
-              .nodeAutoColorBy('id')
-              .nodeLabel(node => node.id)
-              .width(graphWidth)
-              .height(graphHeight)
-              .nodeThreeObject(node => {
-                  const group = new THREE.Group();
-                  const spriteMaterial = new THREE.SpriteMaterial({
-                      map: new THREE.CanvasTexture(createTextCanvas(node.id)),
-                      transparent: true
-                  });
-                  const sprite = new THREE.Sprite(spriteMaterial);
-                  sprite.scale.set(50, 25, 1);
-                  sprite.position.set(0, 15, 0);
-                  sprite.raycast = () => {}; // Disable raycasting on text
-                  group.add(sprite);
-                  return group;
-              })
-              .nodeThreeObjectExtend(true)
-              .linkColor(() => '#3da7c4')
-              .linkOpacity(0.7)
-              .linkWidth(2)
-              .nodeColor(() => 'white')
-              .nodeOpacity(0.7)
-              .onNodeClick(node => {
-                  if (node.link) window.open(node.link, '_blank');
-              })
-              .linkDirectionalArrowLength(5)
-              .linkDirectionalArrowColor(() => 'white')
-              .linkDirectionalArrowRelPos(0.99)
-              .linkDirectionalArrowResolution(8)
-              .linkDirectionalParticles(2)
-              .linkDirectionalParticleSpeed(0.01)
-              .linkDirectionalParticleColor(() => 'orange');
+            graph2(rightContainer);
 
-          graph2(rightContainer);
+            console.log("Mirrored graph successfully created.");
+        }, 3000);
 
-          // Step 5: Move Right Camera Slightly Right
-          setTimeout(() => {
-              const cameraEntity = document.querySelector('a-entity[camera]');
-              if (cameraEntity) {
-                  const currentPos = cameraEntity.getAttribute('position');
-                  const newX = currentPos.x + (cameraOffset*2);
-                  cameraEntity.setAttribute('position', `${newX} ${currentPos.y} ${currentPos.z}`);
-                  console.log(`Right Camera Moved to: ${newX} ${currentPos.y} ${currentPos.z}`);
-              } else {
-                  console.error("Camera entity not found.");
-              }
-          }, 1000); // Wait for A-Frame to load
-          setInterval(() => {
-            const cameraEntity = document.querySelector('a-entity[camera]');
-            const currentPos = cameraEntity.getAttribute('position');
-            console.log("Right Camera Position: ", currentPos)
-    
-    
-          }, 2000);
-
-          console.log(" Mirrored graph successfully created.");
-      }, 3000); // Delay to ensure first graph fully loads
-
-  } catch (error) {
-      console.error(error.message);
-  }
+    } catch (error) {
+        console.error(error.message);
+    }
 });
