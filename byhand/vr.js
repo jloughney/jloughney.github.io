@@ -39,7 +39,7 @@ function toggleColors() {
     const nodeColor = isDarkMode ? 'white' : '#20208a';
     const textColor = isDarkMode ? 'white' : 'black';
 
-    // Update background
+    // Force Safari to repaint the background
     document.body.style.backgroundColor = bgColor;
     graph1.backgroundColor(bgColor);
     graph2.backgroundColor(bgColor);
@@ -52,28 +52,33 @@ function toggleColors() {
     graph1.linkColor(link => getLinkColor(link));
     graph2.linkColor(link => getLinkColor(link));
 
-    // Update Left Graph Text Labels
+    // Force texture update for LEFT graph text labels
     Object.keys(textSpritesLeft).forEach(nodeId => {
         const sprite = textSpritesLeft[nodeId];
         if (sprite) {
+            // **Force Safari to refresh texture**
+            sprite.material.map.dispose(); 
             sprite.material.map = new THREE.CanvasTexture(createTextCanvas(nodeId, textColor));
             sprite.material.needsUpdate = true;
-            //console.log(` Updated LEFT graph text color for node: ${nodeId}`);
+            //console.log(`Updated LEFT graph text color for node: ${nodeId}`);
         }
     });
 
-    // Update Right Graph Text Labels
+    // ✅ Force texture update for RIGHT graph text labels
     Object.keys(textSpritesRight).forEach(nodeId => {
         const sprite = textSpritesRight[nodeId];
         if (sprite) {
+            // **Force Safari to refresh texture**
+            sprite.material.map.dispose();
             sprite.material.map = new THREE.CanvasTexture(createTextCanvas(nodeId, textColor));
             sprite.material.needsUpdate = true;
-            //console.log(` Updated RIGHT graph text color for node: ${nodeId}`);
+            //console.log(`Updated RIGHT graph text color for node: ${nodeId}`);
         }
     });
 
     console.log(`Switched to ${isDarkMode ? 'Dark' : 'Light'} Mode`);
 }
+
 
 
 // Function to determine link color based on date
