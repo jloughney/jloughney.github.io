@@ -6,8 +6,12 @@ let textSprites = {}; // Store text labels for updating later
 let textSpritesLeft = {};
 let textSpritesRight = {};
 
+
+
 // Move the function to the top to prevent reference errors
-function createTextCanvas(text, textColor = 'white') {
+function createTextCanvas(text, textColor = isDarkMode ? 'white' : 'black') {
+    console.log(`🖌️ Creating text for: "${text}" with color: ${textColor}`);
+    
     const canvas = document.createElement('canvas');
     const context = canvas.getContext('2d');
     canvas.width = 512;
@@ -30,61 +34,67 @@ function createTextCanvas(text, textColor = 'white') {
     return canvas;
 }
 
+function updateTextLabels(textSprites, textColor) {
+    console.log(` Updating text labels with color: ${textColor}`);
+
+    Object.keys(textSprites).forEach(nodeId => {
+        const sprite = textSprites[nodeId];
+        if (sprite) {
+            //  Debug: Log node update attempt
+            console.log(`🎯 Updating text for node: ${nodeId} to ${textColor}`);
+
+            //  Remove old texture
+            if (sprite.material.map) sprite.material.map.dispose();
+
+            //  Debug: Log before creating new text
+            console.log(`🖌 Calling createTextCanvas(${nodeId}, ${textColor})`);
+
+            //  Apply new texture
+            const newTexture = new THREE.CanvasTexture(createTextCanvas(nodeId, textColor));
+
+            sprite.material.map = newTexture;
+            sprite.material.needsUpdate = true;
+
+            //  Debug: Confirm texture update applied
+            console.log(` Successfully updated text label for node: ${nodeId}`);
+        }
+    });
+}
+
+
+
 // Function to invert colors
 function toggleColors() {
     isDarkMode = !isDarkMode; // Toggle mode
 
-    // Set new colors
-    const bgColor = isDarkMode ? '#09092e' : 'white';
-    const nodeColor = isDarkMode ? 'white' : '#20208a';
+    // Debug: Check if dark mode is toggled correctly
+    console.log(` Switching to ${isDarkMode ? 'Dark' : 'Light'} Mode`);
+    
     const textColor = isDarkMode ? 'white' : 'black';
+    console.log(` Text color should be: ${textColor}`);
 
-    //  Force Safari to repaint the background
-    document.body.style.backgroundColor = bgColor;
-    document.body.offsetHeight; // **Force Reflow to Fix Safari Background Issue**
+    // Force background update
+    document.body.style.backgroundColor = isDarkMode ? '#09092e' : 'white';
+    document.body.offsetHeight; // Force reflow
 
-    graph1.backgroundColor(bgColor);
-    graph2.backgroundColor(bgColor);
+    graph1.backgroundColor(isDarkMode ? '#09092e' : 'white');
+    graph2.backgroundColor(isDarkMode ? '#09092e' : 'white');
 
-    //  Force graph colors to refresh
-    graph1.nodeColor(() => nodeColor);
-    graph2.nodeColor(() => nodeColor);
+    //  Force node color updates
+    graph1.nodeColor(() => isDarkMode ? 'white' : '#20208a');
+    graph2.nodeColor(() => isDarkMode ? 'white' : '#20208a');
 
-    //  Reapply date-based link colors (Fixes Old Cyan Links in Safari)
-    graph1.linkColor(link => getLinkColor(link)).refresh();
-    graph2.linkColor(link => getLinkColor(link)).refresh();
+    // Debug: Check if function is actually passing correct color
+    console.log(" Calling updateTextLabels() with textColor:", textColor);
 
-    //  FULLY RECREATE TEXT MATERIALS to FORCE Safari to Refresh
-    Object.keys(textSpritesLeft).forEach(nodeId => {
-        const sprite = textSpritesLeft[nodeId];
-        if (sprite) {
-            // **Force Safari to refresh texture**
-            sprite.material.map.dispose();
-            sprite.material = new THREE.SpriteMaterial({ // **Recreate Material**
-                map: new THREE.CanvasTexture(createTextCanvas(nodeId, textColor)),
-                transparent: true
-            });
-            sprite.material.needsUpdate = true;
-            console.log(` Updated LEFT graph text color for node: ${nodeId}`);
-        }
-    });
-
-    Object.keys(textSpritesRight).forEach(nodeId => {
-        const sprite = textSpritesRight[nodeId];
-        if (sprite) {
-            // **Force Safari to refresh texture**
-            sprite.material.map.dispose();
-            sprite.material = new THREE.SpriteMaterial({ // **Recreate Material**
-                map: new THREE.CanvasTexture(createTextCanvas(nodeId, textColor)),
-                transparent: true
-            });
-            sprite.material.needsUpdate = true;
-            console.log(` Updated RIGHT graph text color for node: ${nodeId}`);
-        }
-    });
-
-    console.log(`Switched to ${isDarkMode ? 'Dark' : 'Light'} Mode`);
+    //  Apply fix to both left and right graphs
+    updateTextLabels(textSpritesLeft, textColor);
+    updateTextLabels(textSpritesRight, textColor);
 }
+
+
+
+
 
 
 
