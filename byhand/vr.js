@@ -39,40 +39,47 @@ function toggleColors() {
     const nodeColor = isDarkMode ? 'white' : '#20208a';
     const textColor = isDarkMode ? 'white' : 'black';
 
-    // Force Safari to repaint the background
+    //  Force Safari to repaint the background
     document.body.style.backgroundColor = bgColor;
+    document.body.offsetHeight; // **Force Reflow to Fix Safari Background Issue**
+
     graph1.backgroundColor(bgColor);
     graph2.backgroundColor(bgColor);
 
-    // Update graph colors
+    //  Force graph colors to refresh
     graph1.nodeColor(() => nodeColor);
     graph2.nodeColor(() => nodeColor);
 
-    // Reapply date-based link colors
-    graph1.linkColor(link => getLinkColor(link));
-    graph2.linkColor(link => getLinkColor(link));
+    //  Reapply date-based link colors (Fixes Old Cyan Links in Safari)
+    graph1.linkColor(link => getLinkColor(link)).refresh();
+    graph2.linkColor(link => getLinkColor(link)).refresh();
 
-    // Force texture update for LEFT graph text labels
+    //  FULLY RECREATE TEXT MATERIALS to FORCE Safari to Refresh
     Object.keys(textSpritesLeft).forEach(nodeId => {
         const sprite = textSpritesLeft[nodeId];
         if (sprite) {
             // **Force Safari to refresh texture**
-            sprite.material.map.dispose(); 
-            sprite.material.map = new THREE.CanvasTexture(createTextCanvas(nodeId, textColor));
+            sprite.material.map.dispose();
+            sprite.material = new THREE.SpriteMaterial({ // **Recreate Material**
+                map: new THREE.CanvasTexture(createTextCanvas(nodeId, textColor)),
+                transparent: true
+            });
             sprite.material.needsUpdate = true;
-            //console.log(`Updated LEFT graph text color for node: ${nodeId}`);
+            console.log(` Updated LEFT graph text color for node: ${nodeId}`);
         }
     });
 
-    // ✅ Force texture update for RIGHT graph text labels
     Object.keys(textSpritesRight).forEach(nodeId => {
         const sprite = textSpritesRight[nodeId];
         if (sprite) {
             // **Force Safari to refresh texture**
             sprite.material.map.dispose();
-            sprite.material.map = new THREE.CanvasTexture(createTextCanvas(nodeId, textColor));
+            sprite.material = new THREE.SpriteMaterial({ // **Recreate Material**
+                map: new THREE.CanvasTexture(createTextCanvas(nodeId, textColor)),
+                transparent: true
+            });
             sprite.material.needsUpdate = true;
-            //console.log(`Updated RIGHT graph text color for node: ${nodeId}`);
+            console.log(` Updated RIGHT graph text color for node: ${nodeId}`);
         }
     });
 
